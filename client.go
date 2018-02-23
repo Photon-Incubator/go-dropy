@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/tj/go-dropbox"
+	"github.com/Photon-Incubator/go-dropbox"
 )
 
 // Client wraps dropbox.Client to provide higher level sugar.
@@ -144,6 +144,16 @@ func (c *Client) Download(name string) (io.ReadCloser, error) {
 	}
 
 	return out.Body, nil
+}
+
+// Download returns the contents of `name`.
+func (c *Client) DownloadZip(name string) (io.ReadCloser, int64, error) {
+	out, err := c.Files.DownloadZip(&dropbox.DownloadInput{name})
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return out.Body, out.Length, nil
 }
 
 // Preview returns the PDF preview of `name`.

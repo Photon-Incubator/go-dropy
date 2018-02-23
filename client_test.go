@@ -8,7 +8,7 @@ import (
 
 	"github.com/segmentio/go-env"
 	"github.com/stretchr/testify/assert"
-	"github.com/tj/go-dropbox"
+	"github.com/Photon-Incubator/go-dropbox"
 )
 
 func client() *Client {

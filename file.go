@@ -1,13 +1,13 @@
 package dropy
 
 import (
+	"errors"
 	"io"
 	"os"
 	"strings"
-	"syscall"
 	"time"
 
-	"github.com/tj/go-dropbox"
+	"github.com/Photon-Incubator/go-dropbox"
 )
 
 // FileInfo wraps Dropbox file MetaData to implement os.FileInfo.
@@ -96,7 +96,7 @@ func (f *File) Write(b []byte) (int, error) {
 // Close implements io.Closer.
 func (f *File) Close() error {
 	if f.closed {
-		return &os.PathError{"close", f.Name, syscall.EINVAL}
+		return &os.PathError{Op: "close", Path: f.Name, Err: errors.New("EINVAL")}
 	}
 	f.closed = true
 
@@ -120,7 +120,7 @@ func (f *File) download() error {
 	out, err := f.c.Files.Download(&dropbox.DownloadInput{f.Name})
 	if err != nil {
 		if strings.HasPrefix(err.Error(), "path/not_found/") {
-			return &os.PathError{"open", f.Name, syscall.ENOENT}
+			return &os.PathError{Op: "open", Path: f.Name, Err: errors.New("ENOENT")}
 		}
 		return err
 	}
